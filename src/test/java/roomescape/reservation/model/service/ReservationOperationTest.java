@@ -55,9 +55,6 @@ class ReservationOperationTest extends ServiceTestSupport {
     @Autowired
     private ReservationWaitingRepository reservationWaitingRepository;
 
-    @Autowired
-    private EntityManager entityManager;
-
     private Member savedMember;
     private ReservationTime savedTime;
     private ReservationTheme savedTheme;

@@ -36,8 +36,6 @@ class AdminReservationThemeServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private ReservationRepository reservationRepository;
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @Transient
     @DisplayName("테마 삭제시 해당 테마 id를 참조하고 있는 예약이 있다면 예외를 발생시킨다")
