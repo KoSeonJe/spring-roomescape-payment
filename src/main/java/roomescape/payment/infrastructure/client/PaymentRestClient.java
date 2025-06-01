@@ -15,7 +15,7 @@ import roomescape.reservation.model.vo.PaymentInfo;
 public class PaymentRestClient implements PaymentClient {
 
     private final RestClient restClient;
-    private final ObjectMapper objectMapper;
+    private final PaymentClientErrorHandler paymentClientErrorHandler;
 
     @Override
     public void requestApprove(final PaymentInfo paymentInfo) {
@@ -24,15 +24,7 @@ public class PaymentRestClient implements PaymentClient {
                 .contentType(APPLICATION_JSON)
                 .body(paymentInfo)
                 .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
-                    String errorBody = new String(response.getBody().readAllBytes(), StandardCharsets.UTF_8);
-                    PaymentErrorResponse errorResponse = objectMapper.readValue(errorBody, PaymentErrorResponse.class);
-                    throw new PaymentClientFailException(errorResponse.message(), response.getStatusCode().value());
-                })
-                .onStatus(HttpStatusCode::is5xxServerError, (request, response) -> {
-                    throw new PaymentClientFailException("내부 시스템처리 작업이 실패했습니다. 잠시 후 다시 시도해주세요.",
-                            response.getStatusCode().value());
-                })
+                .onStatus(HttpStatusCode::isError, paymentClientErrorHandler::handleError)
                 .toBodilessEntity();
     }
 }

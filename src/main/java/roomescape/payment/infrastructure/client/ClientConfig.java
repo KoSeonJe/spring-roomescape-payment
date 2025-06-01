@@ -16,7 +16,7 @@ public class ClientConfig {
     @Value("${payment-api.secret-key}")
     private String secretKey;
 
-    private final ObjectMapper objectMapper;
+    private final PaymentClientErrorHandler paymentClientErrorHandler;
 
     @Bean
     public PaymentRestClient paymentRestClient() {
@@ -28,7 +28,7 @@ public class ClientConfig {
                         .baseUrl("https://api.tosspayments.com")
                         .defaultHeader("Authorization", "Basic " + base64Auth)
                         .build(),
-                objectMapper
+                paymentClientErrorHandler
         );
     }
 }
