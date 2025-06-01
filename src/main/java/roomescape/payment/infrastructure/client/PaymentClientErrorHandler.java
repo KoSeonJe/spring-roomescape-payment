@@ -27,8 +27,7 @@ public class PaymentClientErrorHandler {
     }
 
     private void handleClientError(ClientHttpResponse response) throws IOException {
-        String errorBody = new String(response.getBody().readAllBytes(), StandardCharsets.UTF_8);
-        PaymentErrorResponse errorResponse = objectMapper.readValue(errorBody, PaymentErrorResponse.class);
+        PaymentErrorResponse errorResponse = objectMapper.readValue(response.getBody(), PaymentErrorResponse.class);
         throw new PaymentClientFailException(errorResponse.message(), response.getStatusCode().value());
     }
 
