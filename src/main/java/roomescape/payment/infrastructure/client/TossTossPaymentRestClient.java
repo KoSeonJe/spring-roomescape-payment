@@ -10,7 +10,7 @@ import roomescape.payment.model.TossPaymentProcessor;
 import roomescape.payment.model.TossPaymentApproveInfo;
 
 @RequiredArgsConstructor
-public class TossTossPaymentRestProcessor implements TossPaymentProcessor {
+public class TossTossPaymentRestClient implements TossPaymentProcessor {
 
     private final RestClient restClient;
     private final TossPaymentClientErrorHandler tossPaymentClientErrorHandler;

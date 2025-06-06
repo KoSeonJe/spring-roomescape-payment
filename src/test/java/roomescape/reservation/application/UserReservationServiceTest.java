@@ -20,7 +20,7 @@ import roomescape.ReservationTestFixture;
 import roomescape.member.model.Member;
 import roomescape.member.model.MemberRepository;
 import roomescape.member.model.Role;
-import roomescape.payment.infrastructure.client.TossTossPaymentRestProcessor;
+import roomescape.payment.infrastructure.client.TossTossPaymentRestClient;
 import roomescape.reservation.application.dto.request.CreateReservationServiceRequest;
 import roomescape.reservation.application.dto.response.ReservationServiceResponse;
 import roomescape.reservation.model.entity.Reservation;
@@ -51,7 +51,7 @@ class UserReservationServiceTest extends IntegrationTestSupport {
     private MemberRepository memberRepository;
 
     @MockitoBean
-    private TossTossPaymentRestProcessor tossPaymentRestClient;
+    private TossTossPaymentRestClient tossPaymentRestClient;
 
     @BeforeEach
     void setUp() {
