@@ -21,7 +21,7 @@ import org.springframework.http.client.ClientHttpResponse;
 import roomescape.global.exception.ClientFailException.PaymentClientFailException;
 
 @ExtendWith(MockitoExtension.class)
-class PaymentClientErrorHandlerTest {
+class TossPaymentClientErrorHandlerTest {
 
     @Mock
     private HttpRequest httpRequest;
@@ -29,17 +29,17 @@ class PaymentClientErrorHandlerTest {
     @Mock
     private ClientHttpResponse clientHttpResponse;
 
-    private PaymentClientErrorHandler paymentClientErrorHandler;
+    private TossPaymentClientErrorHandler tossPaymentClientErrorHandler;
 
     @BeforeEach
     void setUp() {
         ObjectMapper objectMapper = new ObjectMapper();
-        paymentClientErrorHandler = new PaymentClientErrorHandler(objectMapper);
+        tossPaymentClientErrorHandler = new TossPaymentClientErrorHandler(objectMapper);
     }
 
     @Test
     @DisplayName("4xx 클라이언트 에러를 처리한다")
-    void handleError_ClientError() throws IOException {
+    void handleError_ClientResponseError() throws IOException {
         // given
         String errorJson = """
                 {
@@ -55,7 +55,7 @@ class PaymentClientErrorHandlerTest {
         // when & then
         PaymentClientFailException exception = assertThrows(
                 PaymentClientFailException.class,
-                () -> paymentClientErrorHandler.handleError(httpRequest, clientHttpResponse)
+                () -> tossPaymentClientErrorHandler.handleResponseError(httpRequest, clientHttpResponse)
         );
 
         assertThat(exception.getMessage()).isEqualTo("잘못된 결제 키입니다");
@@ -64,14 +64,14 @@ class PaymentClientErrorHandlerTest {
 
     @Test
     @DisplayName("5xx 서버 에러를 처리한다")
-    void handleError_ServerError() throws IOException {
+    void handleError_ServerResponseError() throws IOException {
         // given
         when(clientHttpResponse.getStatusCode()).thenReturn(HttpStatus.INTERNAL_SERVER_ERROR);
 
         // when & then
         PaymentClientFailException exception = assertThrows(
                 PaymentClientFailException.class,
-                () -> paymentClientErrorHandler.handleError(httpRequest, clientHttpResponse)
+                () -> tossPaymentClientErrorHandler.handleResponseError(httpRequest, clientHttpResponse)
         );
 
         assertThat(exception.getMessage()).isEqualTo("내부 시스템처리 작업이 실패했습니다. 잠시 후 다시 시도해주세요.");
@@ -80,7 +80,7 @@ class PaymentClientErrorHandlerTest {
 
     @Test
     @DisplayName("잘못된 JSON 형식의 4xx 에러 응답 시 IOException이 발생한다")
-    void handleError_InvalidJsonFormat() throws IOException {
+    void handleResponseError_InvalidJsonFormat() throws IOException {
         // given
         String invalidJson = "{ invalid json }";
         InputStream inputStream = new ByteArrayInputStream(invalidJson.getBytes(StandardCharsets.UTF_8));
@@ -91,7 +91,7 @@ class PaymentClientErrorHandlerTest {
         // when & then
         assertThrows(
                 IOException.class,
-                () -> paymentClientErrorHandler.handleError(httpRequest, clientHttpResponse)
+                () -> tossPaymentClientErrorHandler.handleResponseError(httpRequest, clientHttpResponse)
         );
     }
 }

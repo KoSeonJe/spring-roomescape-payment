@@ -1,4 +1,4 @@
-package roomescape.application;
+package roomescape.reservation.application;
 
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
@@ -20,7 +20,7 @@ import roomescape.ReservationTestFixture;
 import roomescape.member.model.Member;
 import roomescape.member.model.MemberRepository;
 import roomescape.member.model.Role;
-import roomescape.payment.infrastructure.client.PaymentRestClient;
+import roomescape.payment.infrastructure.client.TossPaymentRestClient;
 import roomescape.reservation.application.UserReservationService;
 import roomescape.reservation.application.dto.request.CreateReservationServiceRequest;
 import roomescape.reservation.application.dto.response.ReservationServiceResponse;
@@ -52,7 +52,7 @@ class UserReservationServiceTest extends IntegrationTestSupport {
     private MemberRepository memberRepository;
 
     @MockitoBean
-    private PaymentRestClient paymentRestClient;
+    private TossPaymentRestClient tossPaymentRestClient;
 
     @BeforeEach
     void setUp() {
@@ -76,7 +76,7 @@ class UserReservationServiceTest extends IntegrationTestSupport {
         reservationThemeRepository.save(theme);
         memberRepository.save(member);
         
-        doNothing().when(paymentRestClient).requestApprove(any());
+        doNothing().when(tossPaymentRestClient).requestApprove(any());
     }
 
     @DisplayName("요청된 예약 정보로 예약을 진행할 수 있다")
