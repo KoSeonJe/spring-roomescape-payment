@@ -1,6 +1,6 @@
 package roomescape.payment.infrastructure.client;
 
-public record PaymentErrorResponse(
+public record TossPaymentErrorResponse(
         String code,
         String message,
         String data

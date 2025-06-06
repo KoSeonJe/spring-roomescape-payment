@@ -1,5 +1,6 @@
 package roomescape.global.exception;
 
+import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -8,10 +9,13 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,6 +24,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import roomescape.global.exception.ClientTimeoutException.PaymentConnectionTimeoutException;
+import roomescape.global.exception.ClientTimeoutException.PaymentReadTimeoutException;
+import roomescape.global.exception.ClientTimeoutException.PaymentTimeoutException;
 
 //TODO : 구체적인 예외 추상화 시켜 핸들링하기
 @RestControllerAdvice
@@ -56,7 +63,6 @@ public class GlobalExceptionHandler {
         return new ExceptionResponse(BAD_REQUEST.value(), exceptionMessage, LocalDateTime.now());
     }
 
-    // TODO : 잘못 입력된 곳이 HTTP Body인지, 경로변수 혹은 쿼리파라미터 등인지 파악하고 자세하게 예외 메시지를 출력해야 할까? 고민해보기
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ExceptionResponse handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
@@ -124,5 +130,11 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now()
         );
         return ResponseEntity.status(e.getStatusCode()).body(exceptionResponse);
+    }
+
+    @ResponseStatus(GATEWAY_TIMEOUT)
+    @ExceptionHandler(ClientTimeoutException.class)
+    public ExceptionResponse handleClientTimeoutException(ClientTimeoutException e) {
+        return new ExceptionResponse(GATEWAY_TIMEOUT.value(), e.getMessage(), LocalDateTime.now());
     }
 }

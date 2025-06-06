@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,10 +20,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.web.client.ResourceAccessException;
 import roomescape.global.exception.ClientFailException.PaymentClientFailException;
+import roomescape.global.exception.ClientTimeoutException.PaymentConnectionTimeoutException;
+import roomescape.global.exception.ClientTimeoutException.PaymentReadTimeoutException;
+import roomescape.global.exception.ClientTimeoutException.PaymentTimeoutException;
 
 @ExtendWith(MockitoExtension.class)
-class TossPaymentClientErrorHandlerTest {
+class TossTossPaymentProcessorErrorHandlerTest {
 
     @Mock
     private HttpRequest httpRequest;
@@ -93,5 +99,53 @@ class TossPaymentClientErrorHandlerTest {
                 IOException.class,
                 () -> tossPaymentClientErrorHandler.handleResponseError(httpRequest, clientHttpResponse)
         );
+    }
+
+    @Test
+    @DisplayName("ConnectException 발생 시 PaymentConnectionTimeoutException을 던진다")
+    void handleTimeoutError_ConnectException() {
+        // given
+        ConnectException connectException = new ConnectException("Connection refused");
+        ResourceAccessException resourceAccessException = new ResourceAccessException("Connection failed", connectException);
+
+        // when & then
+        PaymentConnectionTimeoutException exception = assertThrows(
+                PaymentConnectionTimeoutException.class,
+                () -> tossPaymentClientErrorHandler.handleTimeoutError(resourceAccessException)
+        );
+
+        assertThat(exception.getCause()).isEqualTo(connectException);
+    }
+
+    @Test
+    @DisplayName("SocketTimeoutException 발생 시 PaymentReadTimeoutException을 던진다")
+    void handleTimeoutError_SocketTimeoutException() {
+        // given
+        SocketTimeoutException socketTimeoutException = new SocketTimeoutException("Read timed out");
+        ResourceAccessException resourceAccessException = new ResourceAccessException("Read timeout", socketTimeoutException);
+
+        // when & then
+        PaymentReadTimeoutException exception = assertThrows(
+                PaymentReadTimeoutException.class,
+                () -> tossPaymentClientErrorHandler.handleTimeoutError(resourceAccessException)
+        );
+
+        assertThat(exception.getCause()).isEqualTo(socketTimeoutException);
+    }
+
+    @Test
+    @DisplayName("기타 Exception 발생 시 PaymentTimeoutException을 던진다")
+    void handleTimeoutError_OtherException() {
+        // given
+        IOException otherException = new IOException("Unknown network error");
+        ResourceAccessException resourceAccessException = new ResourceAccessException("Network error", otherException);
+
+        // when & then
+        PaymentTimeoutException exception = assertThrows(
+                PaymentTimeoutException.class,
+                () -> tossPaymentClientErrorHandler.handleTimeoutError(resourceAccessException)
+        );
+
+        assertThat(exception.getCause()).isEqualTo(otherException);
     }
 }
