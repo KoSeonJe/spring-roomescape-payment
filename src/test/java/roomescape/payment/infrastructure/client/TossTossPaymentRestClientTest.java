@@ -17,7 +17,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
 import roomescape.global.exception.ClientTimeoutException.PaymentConnectionTimeoutException;
 import roomescape.global.exception.ClientTimeoutException.PaymentReadTimeoutException;
-import roomescape.payment.model.TossPaymentApproveInfo;
+import roomescape.payment.model.TossPaymentApprovalInfo;
 
 class TossTossPaymentRestClientTest {
 
@@ -35,7 +35,7 @@ class TossTossPaymentRestClientTest {
                 .build();
 
         TossTossPaymentRestClient client = new TossTossPaymentRestClient(restClient, errorHandler);
-        TossPaymentApproveInfo approveInfo = createApproveInfo();
+        TossPaymentApprovalInfo approveInfo = createApproveInfo();
 
         // when & then
         assertThatThrownBy(() -> client.requestApprove(approveInfo))
@@ -59,7 +59,7 @@ class TossTossPaymentRestClientTest {
                 .build();
 
         TossTossPaymentRestClient client = new TossTossPaymentRestClient(restClient, errorHandler);
-        TossPaymentApproveInfo approveInfo = createApproveInfo();
+        TossPaymentApprovalInfo approveInfo = createApproveInfo();
 
         // when & then
         assertThatThrownBy(() -> client.requestApprove(approveInfo))
@@ -75,11 +75,11 @@ class TossTossPaymentRestClientTest {
         return factory;
     }
 
-    private TossPaymentApproveInfo createApproveInfo() {
-        return TossPaymentApproveInfo.builder()
+    private TossPaymentApprovalInfo createApproveInfo() {
+        return TossPaymentApprovalInfo.builder()
                 .paymentKey("test-payment-key")
                 .orderId("test-order-id")
-                .amount(10000L)
+                .amount(10000)
                 .build();
     }
 }

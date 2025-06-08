@@ -1,12 +1,16 @@
 package roomescape.reservation.application;
 
+import static roomescape.payment.model.PaymentStatus.*;
+import static roomescape.payment.model.PaymentType.*;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import roomescape.payment.model.TossPaymentProcessor;
+import roomescape.payment.model.Payment;
+import roomescape.payment.model.PaymentRepository;
 import roomescape.reservation.application.dto.request.CreateReservationServiceRequest;
 import roomescape.reservation.application.dto.response.ReservationServiceResponse;
 import roomescape.reservation.application.dto.response.UserReservationServiceResponse;
@@ -25,13 +29,16 @@ public class UserReservationService {
     private final ReservationRepository reservationRepository;
     private final ReservationWaitingRepository reservationWaitingRepository;
     private final ReservationOperation reservationOperation;
-    private final TossPaymentProcessor tossPaymentProcessor;
+    private final PaymentRepository paymentRepository;
 
     @Transactional
     public ReservationServiceResponse create(CreateReservationServiceRequest request) {
-        tossPaymentProcessor.requestApprove(request.toPaymentInfo());
         Reservation savedReservation = reservationOperation.reserve(request.toSchedule(), request.memberId());
-        return ReservationServiceResponse.from(savedReservation);
+
+        Payment payment = request.toPayment(savedReservation.getId(), PENDING, TOSS);
+        Payment savedPayment = paymentRepository.save(payment);
+
+        return ReservationServiceResponse.of(savedReservation, savedPayment.getId());
     }
 
     public List<UserReservationServiceResponse> getAllByMemberId(Long memberId) {
@@ -60,7 +67,8 @@ public class UserReservationService {
     ) {
         List<UserReservationServiceResponse> responses = new ArrayList<>();
         for (Reservation reservation : reservations) {
-            responses.add(UserReservationServiceResponse.of(reservation));
+            Payment latestPayment = paymentRepository.getLatestByReservationId(reservation.getId());
+            responses.add(UserReservationServiceResponse.of(reservation, latestPayment));
         }
         for (ReservationWaitingWithRank waitingWithRank : reservationWaitingWithRanks) {
             ReservationWaiting reservationWaiting = waitingWithRank.getReservationWaiting();

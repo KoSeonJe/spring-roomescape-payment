@@ -50,9 +50,6 @@ class UserReservationServiceTest extends IntegrationTestSupport {
     @Autowired
     private MemberRepository memberRepository;
 
-    @MockitoBean
-    private TossTossPaymentRestClient tossPaymentRestClient;
-
     @BeforeEach
     void setUp() {
         ReservationTime reservationTime = ReservationTime.builder()
@@ -74,8 +71,6 @@ class UserReservationServiceTest extends IntegrationTestSupport {
         reservationTimeRepository.save(reservationTime);
         reservationThemeRepository.save(theme);
         memberRepository.save(member);
-        
-        doNothing().when(tossPaymentRestClient).requestApprove(any());
     }
 
     @DisplayName("요청된 예약 정보로 예약을 진행할 수 있다")
@@ -87,7 +82,7 @@ class UserReservationServiceTest extends IntegrationTestSupport {
         Long themeId = 1L;
         Long memberId = 1L;
         CreateReservationServiceRequest request = new CreateReservationServiceRequest(memberId, date, timeId, themeId,
-                null, null, null);
+                null, null, 0);
 
         // when
         ReservationServiceResponse response = userReservationService.create(request);
@@ -111,7 +106,7 @@ class UserReservationServiceTest extends IntegrationTestSupport {
         Long themeId = 1L;
         Long memberId = 1L;
         CreateReservationServiceRequest request = new CreateReservationServiceRequest(memberId, date, timeId, themeId,
-                null, null, null);
+                null, null, 0);
 
         // when & then
         Assertions.assertThatThrownBy(() -> userReservationService.create(request))
@@ -133,7 +128,7 @@ class UserReservationServiceTest extends IntegrationTestSupport {
         reservationRepository.save(reservation);
         Long memberId = 1L;
         CreateReservationServiceRequest request = new CreateReservationServiceRequest(
-                memberId, date, reservationTime.getId(), reservationTheme.getId(), null, null, null);
+                memberId, date, reservationTime.getId(), reservationTheme.getId(), null, null, 0);
 
         // when & then
         Assertions.assertThatThrownBy(() -> userReservationService.create(request))

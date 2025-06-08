@@ -6,22 +6,22 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
-import roomescape.payment.model.TossPaymentProcessor;
-import roomescape.payment.model.TossPaymentApproveInfo;
+import roomescape.payment.model.TossPaymentGateway;
+import roomescape.payment.model.TossPaymentApprovalInfo;
 
 @RequiredArgsConstructor
-public class TossTossPaymentRestClient implements TossPaymentProcessor {
+public class TossTossPaymentRestClient implements TossPaymentGateway {
 
     private final RestClient restClient;
     private final TossPaymentClientErrorHandler tossPaymentClientErrorHandler;
 
     @Override
-    public void requestApprove(final TossPaymentApproveInfo tossPaymentApproveInfo) {
+    public void requestApprove(final TossPaymentApprovalInfo tossPaymentApprovalInfo) {
         try {
             restClient.post()
                     .uri("/v1/payments/confirm")
                     .contentType(APPLICATION_JSON)
-                    .body(tossPaymentApproveInfo)
+                    .body(tossPaymentApprovalInfo)
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, tossPaymentClientErrorHandler::handleResponseError)
                     .toBodilessEntity();

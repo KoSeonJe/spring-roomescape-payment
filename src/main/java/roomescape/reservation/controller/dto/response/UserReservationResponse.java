@@ -12,7 +12,9 @@ public record UserReservationResponse(
         LocalDate date,
         @JsonFormat(pattern = "HH:mm") LocalTime time,
         String status,
-        int rank
+        int rank,
+        String paymentKey,
+        int amount
 ) {
 
     public static UserReservationResponse from(UserReservationServiceResponse response) {
@@ -22,7 +24,9 @@ public record UserReservationResponse(
                 response.date(),
                 response.time(),
                 response.status(),
-                response.rank()
+                response.rank(),
+                response.paymentKey(),
+                response.amount()
         );
     }
 }

@@ -2,7 +2,10 @@ package roomescape.reservation.application.dto.request;
 
 import java.time.LocalDate;
 import lombok.Builder;
-import roomescape.payment.model.TossPaymentApproveInfo;
+import roomescape.payment.model.Payment;
+import roomescape.payment.model.PaymentStatus;
+import roomescape.payment.model.PaymentType;
+import roomescape.payment.model.TossPaymentApprovalInfo;
 import roomescape.reservation.model.vo.Schedule;
 
 @Builder
@@ -13,7 +16,7 @@ public record CreateReservationServiceRequest(
         Long themeId,
         String paymentKey,
         String orderId,
-        Long amount
+        int amount
 ) {
 
     public Schedule toSchedule() {
@@ -24,11 +27,14 @@ public record CreateReservationServiceRequest(
                 .build();
     }
 
-    public TossPaymentApproveInfo toPaymentInfo() {
-        return TossPaymentApproveInfo.builder()
+    public Payment toPayment(Long reservationId, PaymentStatus paymentStatus, PaymentType paymentType) {
+        return Payment.builder()
                 .paymentKey(paymentKey)
                 .orderId(orderId)
                 .amount(amount)
+                .reservationId(reservationId)
+                .status(paymentStatus)
+                .paymentType(paymentType)
                 .build();
     }
 }

@@ -27,7 +27,7 @@ import roomescape.global.exception.ClientTimeoutException.PaymentReadTimeoutExce
 import roomescape.global.exception.ClientTimeoutException.PaymentTimeoutException;
 
 @ExtendWith(MockitoExtension.class)
-class TossTossPaymentProcessorErrorHandlerTest {
+class TossTossPaymentGatewayErrorHandlerTest {
 
     @Mock
     private HttpRequest httpRequest;
