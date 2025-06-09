@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import roomescape.reservation.application.dto.response.UserReservationServiceResponse;
 
-// TODO : Reservation id와 ReservationWaiting id 의미 분리
 public record UserReservationResponse(
         Long id,
         String theme,
