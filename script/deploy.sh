@@ -39,7 +39,7 @@ fi
 
 # Gradle 빌드 (테스트 포함)
 echo "🔨 빌드 및 테스트 중..."
-./gradlew clean build > /dev/null 2>&1
+./gradlew clean build
 echo "✅ 빌드 완료"
 
 # JAR 파일 찾기
