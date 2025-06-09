@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # 배포 디렉토리 설정
 DEPLOY_DIR="/home/ubuntu"
 PROJECT_NAME="spring-roomescape-payment"
@@ -37,13 +39,19 @@ else
     echo "ℹ️  실행 중인 프로세스 없음"
 fi
 
+# gradlew 실행 권한 확인
+if [ ! -x "./gradlew" ]; then
+    echo "🔧 gradlew 실행 권한 설정 중..."
+    chmod +x ./gradlew
+fi
+
 # Gradle 빌드 (테스트 포함)
 echo "🔨 빌드 및 테스트 중..."
 ./gradlew clean build
 echo "✅ 빌드 완료"
 
 # JAR 파일 찾기
-JAR_FILE=$(find build/libs -name "*.jar" | head -1)
+JAR_FILE=$(find build/libs -name "*.jar" -not -name "*plain*" | head -1)
 
 # 백그라운드에서 애플리케이션 실행
 echo "🚀 애플리케이션 시작 중..."
