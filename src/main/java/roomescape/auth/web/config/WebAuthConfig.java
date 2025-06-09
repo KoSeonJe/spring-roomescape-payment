@@ -24,6 +24,9 @@ public class WebAuthConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(checkAdminInterceptor)
-                .addPathPatterns("/admin/**");
+                .addPathPatterns("/admin/**")
+                .excludePathPatterns(
+                        "/favicon.ico"
+                );
     }
 }
