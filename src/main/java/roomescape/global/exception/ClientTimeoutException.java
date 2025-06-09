@@ -25,6 +25,7 @@ public class ClientTimeoutException extends RuntimeException {
     }
 
     public static final class PaymentTimeoutException extends ClientTimeoutException {
+
         private static final String message = "결제 시간이 초과되었습니다.";
 
         public PaymentTimeoutException(Throwable throwable) {

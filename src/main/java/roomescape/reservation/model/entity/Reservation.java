@@ -56,7 +56,8 @@ public class Reservation {
     private Member member;
 
     @Builder
-    private Reservation(LocalDate date, ReservationStatus status, ReservationTime time, ReservationTheme theme, Member member) {
+    private Reservation(LocalDate date, ReservationStatus status, ReservationTime time, ReservationTheme theme,
+            Member member) {
         this.date = date;
         this.status = status;
         this.time = time;

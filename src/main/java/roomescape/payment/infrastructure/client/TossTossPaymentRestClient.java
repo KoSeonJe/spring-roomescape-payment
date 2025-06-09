@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
-import roomescape.payment.model.TossPaymentGateway;
 import roomescape.payment.model.TossPaymentApprovalInfo;
+import roomescape.payment.model.TossPaymentGateway;
 
 @RequiredArgsConstructor
 public class TossTossPaymentRestClient implements TossPaymentGateway {

@@ -5,7 +5,6 @@ import lombok.Builder;
 import roomescape.payment.model.Payment;
 import roomescape.payment.model.PaymentStatus;
 import roomescape.payment.model.PaymentType;
-import roomescape.payment.model.TossPaymentApprovalInfo;
 import roomescape.reservation.model.vo.Schedule;
 
 @Builder

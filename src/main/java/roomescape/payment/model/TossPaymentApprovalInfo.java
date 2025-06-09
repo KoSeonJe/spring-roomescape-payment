@@ -8,4 +8,5 @@ public record TossPaymentApprovalInfo(
         String orderId,
         int amount
 ) {
+
 }

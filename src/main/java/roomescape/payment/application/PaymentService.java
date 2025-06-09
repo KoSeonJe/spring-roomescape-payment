@@ -1,13 +1,12 @@
 package roomescape.payment.application;
 
-import static roomescape.payment.model.PaymentStatus.*;
+import static roomescape.payment.model.PaymentStatus.SUCCESS;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import roomescape.payment.model.Payment;
 import roomescape.payment.model.PaymentRepository;
-import roomescape.payment.model.PaymentStatus;
 import roomescape.payment.model.TossPaymentApprovalInfo;
 import roomescape.payment.model.TossPaymentGateway;
 

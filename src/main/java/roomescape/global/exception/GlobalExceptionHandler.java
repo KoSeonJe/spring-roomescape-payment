@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import roomescape.reservation.model.exception.ReservationAuthException;
-import roomescape.reservation.model.exception.ReservationException;
 
 @RestControllerAdvice
 @Slf4j
@@ -49,7 +47,8 @@ public class GlobalExceptionHandler {
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(value = HttpMessageNotReadableException.class)
-    public ExceptionResponse handleHttpMessageNotReadableException(HttpMessageNotReadableException e, HttpServletRequest request) {
+    public ExceptionResponse handleHttpMessageNotReadableException(HttpMessageNotReadableException e,
+            HttpServletRequest request) {
         Throwable rootCause = e.getRootCause();
         String exceptionMessage = "잘못된 형식의 값이 입력되었습니다.";
         if (rootCause instanceof DateTimeException) {
@@ -62,7 +61,8 @@ public class GlobalExceptionHandler {
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ExceptionResponse handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e, HttpServletRequest request) {
+    public ExceptionResponse handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e,
+            HttpServletRequest request) {
         String exceptionMessage = "잘못된 형식의 값이 입력되었습니다.";
 
         handleLoggingWarn(request, e, BAD_REQUEST.value(), exceptionMessage);
@@ -71,7 +71,8 @@ public class GlobalExceptionHandler {
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ExceptionResponse handleMissingServletRequestParameterException(MissingServletRequestParameterException e, HttpServletRequest request) {
+    public ExceptionResponse handleMissingServletRequestParameterException(MissingServletRequestParameterException e,
+            HttpServletRequest request) {
         String exceptionMessage = "필수 정보(파라미터)가 누락되었습니다";
 
         handleLoggingWarn(request, e, BAD_REQUEST.value(), exceptionMessage);
@@ -88,7 +89,8 @@ public class GlobalExceptionHandler {
 
     @ResponseStatus(UNPROCESSABLE_ENTITY)
     @ExceptionHandler(BusinessRuleViolationException.class)
-    public ExceptionResponse handleBusinessRuleViolationException(BusinessRuleViolationException e, HttpServletRequest request) {
+    public ExceptionResponse handleBusinessRuleViolationException(BusinessRuleViolationException e,
+            HttpServletRequest request) {
 
         handleLoggingWarn(request, e, UNPROCESSABLE_ENTITY.value(), e.getMessage());
         return new ExceptionResponse(UNPROCESSABLE_ENTITY.value(), e.getMessage(), LocalDateTime.now());
@@ -124,7 +126,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ClientFailException.class)
-    public ResponseEntity<ExceptionResponse> handleClientFailException(ClientFailException e, HttpServletRequest request) {
+    public ResponseEntity<ExceptionResponse> handleClientFailException(ClientFailException e,
+            HttpServletRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(
                 e.getStatusCode(),
                 e.getMessage(),

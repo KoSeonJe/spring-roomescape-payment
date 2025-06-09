@@ -5,4 +5,5 @@ public record TossPaymentErrorResponse(
         String message,
         String data
 ) {
+
 }

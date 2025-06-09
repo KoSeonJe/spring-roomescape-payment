@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
@@ -48,7 +47,8 @@ public class TossPaymentClientErrorHandler {
     }
 
     private void handleClientError(ClientHttpResponse response) throws IOException {
-        TossPaymentErrorResponse errorResponse = objectMapper.readValue(response.getBody(), TossPaymentErrorResponse.class);
+        TossPaymentErrorResponse errorResponse = objectMapper.readValue(response.getBody(),
+                TossPaymentErrorResponse.class);
         throw new PaymentClientFailException(errorResponse.message(), response.getStatusCode().value());
     }
 
