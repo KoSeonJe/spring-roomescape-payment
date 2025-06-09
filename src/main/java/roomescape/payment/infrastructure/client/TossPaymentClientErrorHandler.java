@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
@@ -14,17 +15,17 @@ import roomescape.global.exception.ClientTimeoutException.PaymentConnectionTimeo
 import roomescape.global.exception.ClientTimeoutException.PaymentReadTimeoutException;
 import roomescape.global.exception.ClientTimeoutException.PaymentTimeoutException;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class TossPaymentClientErrorHandler {
 
     private final ObjectMapper objectMapper;
 
-    //TODO : 어떤 결제 API를 수행하다 타임아웃 발생했는지, 로그로 남기기
     public void handleTimeoutError(ResourceAccessException e) {
         Throwable cause = e.getCause();
-
         if (cause instanceof ConnectException) {
+
             throw new PaymentConnectionTimeoutException(cause);
         }
 
