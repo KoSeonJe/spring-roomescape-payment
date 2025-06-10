@@ -15,10 +15,10 @@ cd $DEPLOY_DIR
 echo "📦 코드 업데이트 중..."
 if [ -d "$PROJECT_DIR" ]; then
     cd $PROJECT_DIR
-    git pull origin step2 > /dev/null 2>&1
+    git pull origin step2
     echo "✅ Git pull 완료"
 else
-    git clone -b step2 https://github.com/KoSeonJe/spring-roomescape-payment.git > /dev/null 2>&1
+    git clone -b step2 https://github.com/KoSeonJe/spring-roomescape-payment.git
     if [ -d "$PROJECT_DIR" ]; then
         cd $PROJECT_DIR
         echo "✅ Git clone 완료"
@@ -47,7 +47,7 @@ fi
 
 # Gradle 빌드 (테스트 포함)
 echo "🔨 빌드 및 테스트 중..."
-./gradlew bootJar
+./gradlew clean build --info
 echo "✅ 빌드 완료"
 
 # JAR 파일 폴더로 이동
@@ -56,3 +56,5 @@ cd build/libs
 # 백그라운드에서 애플리케이션 실행
 echo "🚀 애플리케이션 시작 중..."
 nohup java -jar spring-roomescape-payment-0.0.1-SNAPSHOT.jar &
+
+echo "🚀 배포 완료"
