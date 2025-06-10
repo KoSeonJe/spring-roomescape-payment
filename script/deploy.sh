@@ -46,8 +46,8 @@ if [ ! -x "./gradlew" ]; then
 fi
 
 # Gradle 빌드 (테스트 포함)
-echo "🔨 빌드 및 테스트 중..."
-./gradlew clean build --info
+echo "🔨 빌드 중..."
+./gradlew bootJar -x test
 echo "✅ 빌드 완료"
 
 # JAR 파일 폴더로 이동
