@@ -15,7 +15,9 @@ cd $DEPLOY_DIR
 echo "📦 코드 업데이트 중..."
 if [ -d "$PROJECT_DIR" ]; then
     cd $PROJECT_DIR
+    git stash
     git pull origin step2
+    git stash pop
     echo "✅ Git pull 완료"
 else
     git clone -b step2 https://github.com/KoSeonJe/spring-roomescape-payment.git
