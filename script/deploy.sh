@@ -47,15 +47,12 @@ fi
 
 # Gradle 빌드 (테스트 포함)
 echo "🔨 빌드 및 테스트 중..."
-./gradlew clean build
+./gradlew bootJar
 echo "✅ 빌드 완료"
 
-# JAR 파일 찾기
-JAR_FILE=$(find build/libs -name "*.jar" -not -name "*plain*" | head -1)
+# JAR 파일 폴더로 이동
+cd build/libs
 
 # 백그라운드에서 애플리케이션 실행
 echo "🚀 애플리케이션 시작 중..."
-nohup java -jar $JAR_FILE > app.log 2>&1 &
-
-echo "✅ 배포 완료: $PROJECT_NAME"
-echo "📋 로그 확인: tail -f $PROJECT_DIR/app.log"
+nohup java -jar spring-roomescape-payment-0.0.1-SNAPSHOT.jar &
