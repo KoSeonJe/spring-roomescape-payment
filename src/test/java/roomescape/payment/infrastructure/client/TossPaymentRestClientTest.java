@@ -19,7 +19,7 @@ import roomescape.global.exception.ClientTimeoutException.PaymentConnectionTimeo
 import roomescape.global.exception.ClientTimeoutException.PaymentReadTimeoutException;
 import roomescape.payment.model.TossPaymentApprovalInfo;
 
-class TossTossPaymentRestClientTest {
+class TossPaymentRestClientTest {
 
     private TossPaymentClientErrorHandler errorHandler = new TossPaymentClientErrorHandler(new ObjectMapper());
     private int connectionTimeoutSeconds = 1;
@@ -34,7 +34,7 @@ class TossTossPaymentRestClientTest {
                 .requestFactory(createTimeoutRequestFactory(connectionTimeoutSeconds, readTimeoutSeconds)) // 3초 연결 타임아웃
                 .build();
 
-        TossTossPaymentRestClient client = new TossTossPaymentRestClient(restClient, errorHandler);
+        TossPaymentRestClient client = new TossPaymentRestClient(restClient, errorHandler);
         TossPaymentApprovalInfo approveInfo = createApproveInfo();
 
         // when & then
@@ -58,7 +58,7 @@ class TossTossPaymentRestClientTest {
                 .requestFactory(createTimeoutRequestFactory(connectionTimeoutSeconds, readTimeoutSeconds))
                 .build();
 
-        TossTossPaymentRestClient client = new TossTossPaymentRestClient(restClient, errorHandler);
+        TossPaymentRestClient client = new TossPaymentRestClient(restClient, errorHandler);
         TossPaymentApprovalInfo approveInfo = createApproveInfo();
 
         // when & then

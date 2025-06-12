@@ -12,7 +12,7 @@ import roomescape.payment.model.TossPaymentGateway;
 
 @Slf4j
 @RequiredArgsConstructor
-public class TossTossPaymentRestClient implements TossPaymentGateway {
+public class TossPaymentRestClient implements TossPaymentGateway {
 
     private final RestClient restClient;
     private final TossPaymentClientErrorHandler tossPaymentClientErrorHandler;
@@ -36,7 +36,7 @@ public class TossTossPaymentRestClient implements TossPaymentGateway {
                     tossPaymentApprovalInfo.paymentKey(), duration);
 
         } catch (ResourceAccessException e) {
-            log.warn("Toss 결제 타임아웃 - paymentKey: {}, paymentAction: {}, endPoint: {}",
+            log.error("Toss 결제 타임아웃 - paymentKey: {}, paymentAction: {}, endPoint: {}",
                     tossPaymentApprovalInfo.paymentKey(), "결제 승인", "/v1/payments/confirm");
             tossPaymentClientErrorHandler.handleTimeoutError(e);
         }

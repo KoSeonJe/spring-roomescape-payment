@@ -18,11 +18,11 @@ public class PaymentClientConfig {
     private final TossPaymentClientErrorHandler tossPaymentClientErrorHandler;
 
     @Bean
-    public TossTossPaymentRestClient paymentRestClient() {
+    public TossPaymentRestClient paymentRestClient() {
         String base64Auth = Base64.getEncoder()
                 .encodeToString(tossPaymentProperties.getSecretKey().getBytes(StandardCharsets.UTF_8));
 
-        return new TossTossPaymentRestClient(
+        return new TossPaymentRestClient(
                 RestClient.builder()
                         .baseUrl(tossPaymentProperties.getBaseUrl())
                         .defaultHeader("Authorization", "Basic " + base64Auth)
