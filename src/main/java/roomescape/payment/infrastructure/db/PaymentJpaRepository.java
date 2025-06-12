@@ -6,5 +6,5 @@ import roomescape.payment.model.Payment;
 
 public interface PaymentJpaRepository extends JpaRepository<Payment, Long> {
 
-    Optional<Payment> findTopByReservationIdOrderByIdDesc(Long reservationId);
+    Optional<Payment> findTopByReservationIdOrderByCreatedAtDesc(Long reservationId);
 }

@@ -19,7 +19,7 @@ public class PaymentDbRepository implements PaymentRepository {
 
     @Override
     public Payment getLatestByReservationId(Long reservationId) {
-        return paymentJpaRepository.findTopByReservationIdOrderByIdDesc(reservationId)
+        return paymentJpaRepository.findTopByReservationIdOrderByCreatedAtDesc(reservationId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "해당 예약 ID(id:" + reservationId + ")로 가장 최근 결제 정보를 찾을 수 없습니다."));
     }

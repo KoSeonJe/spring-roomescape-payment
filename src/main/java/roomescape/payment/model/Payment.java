@@ -7,10 +7,13 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -36,6 +39,14 @@ public class Payment {
     private PaymentStatus status;
 
     private Long reservationId;
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
 
     @Builder
     private Payment(String orderId, String paymentKey, int amount, PaymentType paymentType, PaymentStatus status,
